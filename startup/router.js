@@ -1,8 +1,7 @@
-const mongoose = require('mongoose');
-const config = require('config');
+const express = require('express');
+const personRoutes = require('../src/routes/pessoas');
 
-module.exports = function(){
-    const db = config.get('db');
-    mongoose.connect(db)
-        .then(() => console.log(`connected to ${db}`));
-}
+module.exports = (app) => {
+    app.use(express.json());
+    app.use('/api', personRoutes);
+};

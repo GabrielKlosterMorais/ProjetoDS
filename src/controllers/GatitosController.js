@@ -3,15 +3,16 @@ const Gatitos = require('../models/gatitos');
 class GatitosController {
     static async create(req, res) {
         try {
-            const { name, idPessoa, pessoaTemGato } = req.body;
-            if (!name || !idPessoa || !pessoaTemGato) {
+            const { name, idPessoa, pessoaTemGato, racaGato } = req.body;
+            if (!name || !idPessoa || !pessoaTemGato || !racaGato ) {
                 return res.status(400).json({ message: "Dados inválidos." });
             }
             
             const gatitosData = {
                 name,
                 idPessoa,
-                pessoaTemGato
+                pessoaTemGato,
+                racaGato
             };
 
             const newGatitos = await Gatitos.create(gatitosData);

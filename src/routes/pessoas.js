@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const gatitosController = require('../controllers/gatitosController');
+const PessoaController = require('../controllers/PessoaController');
 
 router
-    .get('/people', gatitosController.getAll)
-    .post('/people', gatitosController.create)
-    .get('/people/:id', gatitosController.getById)
-    .put('/people/:id', gatitosController.update)
-    .delete('/people/:id', gatitosController.delete)
+    .get('/people', PessoaController.getAll)
+    .post('/people', PessoaController.create)
+    .get('/people/:id', PessoaController.getById)
+    .put('/people/:id', PessoaController.update)
+    .delete('/people/:id', PessoaController.delete)
 
 module.exports = router;
+
+
