@@ -3,113 +3,82 @@ const Gatitos = require('../models/gatitos');
 class GatitosController {
     static async create(req, res) {
         try {
-            const { name, idPessoa, pessoaTemGato, racaGato } = req.body;
-            if (!name || !idPessoa || !pessoaTemGato || !racaGato ) {
+            const { nameGato, racaGato, pessoaTemGato } = req.body;
+            if (!nameGato || !racaGato || !pessoaTemGato) {
                 return res.status(400).json({ message: "Dados inválidos." });
             }
             
             const gatitosData = {
-                name,
-                idPessoa,
-                pessoaTemGato,
-                racaGato
+            name,
+            idadePessoa
+
             };
-
             const newGatitos = await Gatitos.create(gatitosData);
-
-            return res.status(201).json({ 
-                message: 'Gatito criado com sucesso', 
-                data: newGatitos 
-            });
+            return res.status(201).json({ message: 'Pessoa criada com sucesso', data: newGatitos });
 
         } catch (error) {
-            return res.status(500).json({ 
-                message: 'Erro ao criar gatito', 
-                error: error.message 
-            });
+            return res.status(500).json({ message: 'Erro ao criar pessoa', error: error.message });
         }
     }
 
     static async getAll(req, res) {
         try {
-            const gatitos = await Gatitos.find();
-            return res.status(200).json({ data: gatitos });
+           const people = await Gatitos.find();
+            return res.status(200).json({ data: people });
         } catch (error) {
-            return res.status(500).json({ 
-                message: 'Erro ao encontrar gatitos', 
-                error: error.message 
-            });
+            return res.status(500).json({ message: 'Erro ao encontrar Gatos', error: error.message });
         }
     }
 
     static async getById(req, res) {
         try {
             const { id } = req.params;
-            const gatitos = await Gatitos.findById(id);
-
+            const pessoas = await Gatitos.findById(id);
             if (!gatitos) {
-                return res.status(404).json({ message: 'Gatito não encontrado' });
+                return res.status(404).json({ message: 'gato não encontrada' });
             }
-
             return res.status(200).json({ data: gatitos });
-
         } catch (error) {
-            return res.status(500).json({ 
-                message: 'Erro ao encontrar gatito', 
-                error: error.message 
-            });
+            return res.status(500).json({ message: 'Erro ao encontrar gato', error: error.message });
         }
     }
 
     static async update(req, res) {
         try {
             const { id } = req.params;
-            const { name, idPessoa, pessoaTemGato } = req.body;
-
+            const { nameGato, racaGato, pessoaTemGato } = req.body;
             const updatedData = {
-                name,
-                idPessoa,
+                nameGato,
+                racaGato,
                 pessoaTemGato
             };
-
-            const updatedGatitos = await Gatitos.findByIdAndUpdate(id, updatedData, { new: true });
-
-            if (!updatedGatitos) {
-                return res.status(404).json({ message: 'Gatito não encontrado' });
+            const updatedGatito = await Gatitos.findByIdAndUpdate(id, updatedData, { new: true });
+            if (!updatedGatito) {
+                return res.status(404).json({ message: 'Gato não encontrada' });
             }
-
-            return res.status(200).json({ 
-                message: 'Gatito atualizado com sucesso', 
-                data: updatedGatitos 
-            });
-
+            return res.status(200).json({ message: 'gato atualizada com sucesso', data: updatedGatito });
         } catch (error) {
-            return res.status(500).json({ 
-                message: 'Erro ao atualizar gatito', 
-                error: error.message 
-            });
+            return res.status(500).json({ message: 'Erro ao atualizar gato', error: error.message });
         }
     }
 
-    static async delete(req, res) {
-        try {
-            const { id } = req.params;
+ static async delete(req, res) {
+  try {
+    const gatitos = await Gatitos.findById(req.params.id);
 
-            const deletedGatitos = await Gatitos.findByIdAndDelete(id);
-
-            if (!deletedGatitos) {
-                return res.status(404).json({ message: 'Gatito não encontrado' });
-            }
-
-            return res.status(200).json({ message: 'Gatito deletado com sucesso' });
-
-        } catch (error) {
-            return res.status(500).json({ 
-                message: 'Erro ao deletar gatito', 
-                error: error.message 
-            });
-        }
+    if (!gatitos) {
+      return res.status(404).json({ error: "Item não encontrado" });
     }
+
+    gatitos.isActive = false;
+    await gatitos.save();
+
+    return res.status(200).json({ message: "Item desativado" });
+  } catch (error) {
+    return res.status(500).json({ error: "Erro ao deletar gato" });
+  }
 }
+}	
+
 
 module.exports = GatitosController;

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
-const Items = mongoose.model('Items', {
-    name: String,
+const Gatitos = mongoose.model('Items', {
+    nameGato: String,
     idGato: Number,
     racaGato: String, 
     pessoaTemGato: Boolean,
